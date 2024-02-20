@@ -20,4 +20,4 @@ Toss your scrap in the Scrap Cannon and send it flying, aim it well and it'll sa
 </details>
 
 \
-![image](https://i.imgur.com/qDJTUQ8.gif)
+![image](https://i.imgur.com/Vwa8PTY.gif)
