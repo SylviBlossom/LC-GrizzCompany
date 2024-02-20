@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>GrizzCompany-Enemies</AssemblyName>
+        <Description>A Lethal Company mod</Description>
+        <Version>1.0.0</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>9.0</LangVersion>
+        <RootNamespace>GrizzCompany.Enemies</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Core" Version="5.*" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+        <PackageReference Include="Evaisa.LethalLib" Version="0.14.2" />
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>..\..\lib-stripped\Managed-v49-strip\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="MMHOOK_Assembly-CSharp">
+            <HintPath>..\..\lib-stripped\MMHOOK-v49-strip\MMHOOK_Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Netcode.Runtime">
+            <HintPath>..\..\lib-stripped\UnityEngine-strip\Unity.Netcode.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>..\..\lib-stripped\UnityEngine-strip\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>..\..\lib-stripped\UnityEngine-strip\UnityEngine.UI.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
+        <Exec Command="call &quot;$(ProjectDir)..\buildpackage.bat&quot; &quot;$(TargetDir)&quot; &quot;$(TargetName)&quot; &quot;$(ProjectDir)&quot;" />
+    </Target>
+</Project>

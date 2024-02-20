@@ -68,6 +68,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-GrizzCompany/bin/
-GrizzCompany/obj/
-package/
+GrizzCompany*/src/bin/
+GrizzCompany*/src/obj/
+GrizzCompany*/package/
