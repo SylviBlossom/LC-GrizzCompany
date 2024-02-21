@@ -374,7 +374,7 @@ namespace GrizzCompany.Items
 			HUDManager.Instance.itemSlotIcons[player.currentItemSlot].enabled = false;
 			HUDManager.Instance.holdingTwoHandedItem.enabled = false;
 
-			var localPos = StartOfRound.Instance.propsContainer.InverseTransformPoint(landingPosition);
+			var localPos = StartOfRound.Instance.propsContainer.InverseTransformPoint(transform.position + 0.75f * Vector3.up);
 
 			player.PlaceGrabbableObject(StartOfRound.Instance.propsContainer, localPos, false, heldObject);
 			heldObject.DiscardItemOnClient();
@@ -428,7 +428,7 @@ namespace GrizzCompany.Items
 
 			if (!player.IsOwner)
 			{
-				var localPos = StartOfRound.Instance.propsContainer.InverseTransformPoint(landingPosition);
+				var localPos = StartOfRound.Instance.propsContainer.InverseTransformPoint(transform.position + 0.75f * Vector3.up);
 
 				player.PlaceGrabbableObject(StartOfRound.Instance.propsContainer, localPos, false, heldObject);
 
@@ -510,6 +510,14 @@ namespace GrizzCompany.Items
 			heldObject.transform.localPosition = finalLocalPosition;
 			heldObject.hasHitGround = false;
 			heldObject.fallTime = 0f;
+
+			// arbitrary time for fixing ragdolls?
+			yield return new WaitForSeconds(1f);
+
+			if (heldObject is RagdollGrabbableObject ragdollObject)
+			{
+				ragdollObject.hasBeenPlaced = false;
+			}
 		}
 
 		// https://forum.unity.com/threads/generating-dynamic-parabola.211681/#post-1426169
