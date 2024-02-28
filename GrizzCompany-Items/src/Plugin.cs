@@ -11,7 +11,7 @@ namespace GrizzCompany.Items
     {
         public const string GUID = "SylviBlossom.GrizzCompany-Items";
         public const string NAME = "GrizzCompany-Items";
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "1.0.1";
 
         public static Plugin Instance { get; private set; }
 		public static new Config Config { get; private set; }
