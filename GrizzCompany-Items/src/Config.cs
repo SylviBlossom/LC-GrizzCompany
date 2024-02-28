@@ -123,7 +123,7 @@ namespace GrizzCompany.Items
 
 			try
 			{
-				SyncInstance(data);
+				Instance.SyncInstance(data);
 				ApplyValues();
 			}
 			catch (Exception e)
@@ -153,7 +153,7 @@ namespace GrizzCompany.Items
 		[HarmonyPatch(typeof(GameNetworkManager), "StartDisconnect")]
 		private static void PlayerLeave()
 		{
-			RevertSync();
+			Instance.RevertSync();
 			ApplyValues();
 		}
 		#endregion
