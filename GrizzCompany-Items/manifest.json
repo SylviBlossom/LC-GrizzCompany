@@ -1,12 +1,12 @@
 {
     "name": "GrizzCompany_Items",
-    "version_number": "1.0.1",
+    "version_number": "1.0.2",
     "website_url": "https://github.com/SylviBlossom/LC-GrizzCompany",
     "description": "Salmon Run inspired Lethal Company items (currently just the Scrap Cannon)",
     "dependencies": [
         "BepInEx-BepInExPack-5.4.2100",
         "Evaisa-LethalLib-0.14.2",
-        "Owen3H-CSync-1.0.8",
+        "Owen3H-CSync-2.0.0",
         "SylviBlossom-TerminalConflictFix-1.1.0"
     ]
 }
