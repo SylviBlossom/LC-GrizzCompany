@@ -7,6 +7,7 @@ using UnityEngine;
 namespace GrizzCompany.Items
 {
     [BepInPlugin(GUID, NAME, VERSION)]
+	[BepInDependency("com.sigurd.csync")]
     public class Plugin : BaseUnityPlugin
     {
         public const string GUID = "SylviBlossom.GrizzCompany-Items";
