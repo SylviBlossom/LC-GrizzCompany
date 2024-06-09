@@ -1,3 +1,8 @@
+### v1.0.4
+- Update to v50
+- Disable scrap cannon movement hinderance (can be re-enabled in config)
+- Add config option to show colored "guide lines" for the cannon's targets (blue is ship, yellow is main, red is fire)
+
 ### v1.0.3
 - Update to Sigurd CSync v3.1.0 (old CSync has been deprecated)
 

@@ -13,6 +13,7 @@ namespace GrizzCompany.Items
 		public static bool enableDebugLines = false;
 		public static int maxEntranceCount = 4;
 		public static float movementHinderance = 0.8f; // 0.8f
+		public static float weight = 1.8f;
 
 		public static float arcHeight = 30f;
 		public static float launchSpeed = 30f;
@@ -40,6 +41,7 @@ namespace GrizzCompany.Items
 
 		private Random cannonRandom = new();
 		private bool interactWaiting;
+		private bool hadHindered = false;
 
 		public override void OnNetworkSpawn()
 		{
@@ -56,20 +58,23 @@ namespace GrizzCompany.Items
 			cannonTrigger.interactable = false;
 			cannonTrigger.disabledHoverTip = "";
 
-			if (playerHeldBy != null)
+			if (playerHeldBy != null && Plugin.Config.ScrapCannonHinderedMovement.Value)
 			{
 				playerHeldBy.isMovementHindered++;
 				playerHeldBy.hinderedMultiplier *= movementHinderance;
+				hadHindered = true;
 			}
 		}
 
 		public override void DiscardItem()
 		{
-			if (playerHeldBy != null)
+			if (playerHeldBy != null && hadHindered)
 			{
 				playerHeldBy.isMovementHindered = Mathf.Clamp(playerHeldBy.isMovementHindered - 1, 0, 100);
 				playerHeldBy.hinderedMultiplier = Mathf.Clamp(playerHeldBy.hinderedMultiplier / movementHinderance, 1f, 100f);
 			}
+
+			hadHindered = false;
 
 			base.DiscardItem();
 		}
@@ -83,18 +88,21 @@ namespace GrizzCompany.Items
 				return;
 			}
 
-			if (playerHeldBy != null)
+			if (playerHeldBy != null && IsOwner && Plugin.Config.ScrapCannonGuideLines.Value)
 			{
-				if (enableDebugLines)
+				DrawDebugLines();
+			}
+			else
+			{
+				foreach (var line in debugLines)
 				{
-					DrawDebugLines();
+					line.enabled = false;
 				}
-				return;
 			}
 
-			foreach (var line in debugLines)
+			if (playerHeldBy != null)
 			{
-				line.enabled = false;
+				return;
 			}
 
 			if (isInShipRoom || isInFactory || StartOfRound.Instance.inShipPhase)

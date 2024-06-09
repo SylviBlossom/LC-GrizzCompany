@@ -10,7 +10,7 @@ mkdir "%BaseDir%package"
 
 :: Copy all files needed for the package to the package directory
 copy /Y "%TargetDir%%TargetName%.dll" "%BaseDir%package\%TargetName%.dll"
-copy /Y "%BaseDir%assets\grizzcompany-enemies" "%BaseDir%package\grizzcompany-enemies.bundle"
+copy /Y "%BaseDir%assets\grizzcompany-enemies.bundle" "%BaseDir%package\grizzcompany-enemies.bundle"
 copy /Y "%BaseDir%manifest.json" "%BaseDir%package\manifest.json"
 copy /Y "%BaseDir%README.md" "%BaseDir%package\README.md"
 copy /Y "%BaseDir%CHANGELOG.md" "%BaseDir%package\CHANGELOG.md"

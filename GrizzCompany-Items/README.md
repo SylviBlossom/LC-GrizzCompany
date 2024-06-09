@@ -15,8 +15,8 @@ Toss your scrap in the Scrap Cannon and send it flying, aim it well and it'll sa
 
 - Hold an item and interact with the top part of the cannon to launch it, and grab the cannon from the handle on the back.
 - Aim the cannon towards where you want to shoot your items. It can be shot towards the ship, or any of the entrances.
-- Aiming is fairly lenient, but make sure you're on target! Otherwise, it'll shoot your items forward an unknown distance (and potentially have them end up unreachable).
-- Carrying the scrap cannon will slow you down and make you unable to sprint or jump - transporting it isn't easy!
+- Aiming is pretty precise, make sure you're on target! Otherwise, it'll shoot your items forward an unknown distance (and potentially have them end up unreachable).
+- The scrap cannon is very heavy - transporting it isn't easy!
 </details>
 
 \

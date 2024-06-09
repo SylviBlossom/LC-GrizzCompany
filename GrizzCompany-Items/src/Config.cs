@@ -1,75 +1,60 @@
 ﻿using BepInEx.Configuration;
+using CSync.Extensions;
 using CSync.Lib;
-using CSync.Util;
-using GameNetcodeStuff;
 using HarmonyLib;
 using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using Unity.Collections;
-using Unity.Netcode;
 
 namespace GrizzCompany.Items
 {
-	[DataContract]
-	public class Config : SyncedConfig<Config>
+	public class Config : SyncedConfig2<Config>
 	{
-		[DataMember] public SyncedEntry<bool> ScrapCannonEnabled { get; internal set; }
-		[DataMember] public SyncedEntry<int> ScrapCannonPrice { get; internal set; }
+		[SyncedEntryField] public SyncedEntry<bool> ScrapCannonEnabled;
+		[SyncedEntryField] public SyncedEntry<int> ScrapCannonPrice;
+		[SyncedEntryField] public SyncedEntry<bool> ScrapCannonGuideLines;
+		[SyncedEntryField] public SyncedEntry<bool> ScrapCannonHinderedMovement;
 
 		public Config(ConfigFile cfg) : base(Plugin.GUID)
 		{
-			ConfigManager.Register(this);
-
 			ScrapCannonEnabled = cfg.BindSyncedEntry("ScrapCannon", "Enabled", true, "Whether the Scrap cannon is added to the store.");
 			ScrapCannonPrice = cfg.BindSyncedEntry("ScrapCannon", "Price", -1, $"The cost of the Scrap cannon in the store. -1 means default (currently {Assets.ScrapCannon.price}).");
+			ScrapCannonGuideLines = cfg.BindSyncedEntry("ScrapCannon", "ShowGuideLines", false, "Displays lines on the screen while holding the Scrap cannon indicating target angles (blue is ship, yellow is main entrance, red is fire exit).");
+			ScrapCannonHinderedMovement = cfg.BindSyncedEntry("ScrapCannon", "HinderedMovement", false, "Prevents the player from jumping or sprinting while carrying the Scrap cannon.");
 
-			ScrapCannonEnabled.SettingChanged += SettingChanged;
-			ScrapCannonPrice.SettingChanged += SettingChanged;
+			ScrapCannonEnabled.Changed += (_, _) => UpdateScrapCannonShop();
+			ScrapCannonPrice.Changed += (_, _) => UpdateScrapCannonShop();
+			ScrapCannonHinderedMovement.Changed += (_, _) => UpdateScrapCannonHinderedMovement();
 
-			SyncComplete += SettingSynced;
-			SyncReverted += SettingSynced;
+			InitialSyncCompleted += (_, _) => UpdateValues();
+
+			ConfigManager.Register(this);
 		}
 
-		private static void ApplyValues()
+		public void UpdateValues()
 		{
-			ItemUtility.ToggleShopItem(Assets.ScrapCannon.item, Instance.ScrapCannonEnabled.Value);
-			ItemUtility.UpdateShopPrice(Assets.ScrapCannon.item, Instance.ScrapCannonPrice.Value, Assets.ScrapCannon.price);
+			UpdateScrapCannonShop();
+			UpdateScrapCannonHinderedMovement();
 		}
 
-		private void SettingChanged(object sender, EventArgs e)
+		private void UpdateScrapCannonShop()
 		{
-			if (!IsHost) return;
-
-			ApplyValues();
-			SendSync();
+			ItemUtility.ToggleShopItem(Assets.ScrapCannon.item, ScrapCannonEnabled.Value);
+			ItemUtility.UpdateShopPrice(Assets.ScrapCannon.item, ScrapCannonPrice.Value, Assets.ScrapCannon.price);
 		}
 
-		private void SettingSynced(object sender, EventArgs e)
+		private void UpdateScrapCannonHinderedMovement()
 		{
-			ApplyValues();
+			if (Assets.ScrapCannon.item == null)
+			{
+				return;
+			}
+			Assets.ScrapCannon.item.weight = ScrapCannonHinderedMovement.Value ? 1f : ScrapCannonItem.weight;
 		}
 
 		[HarmonyPostfix]
 		[HarmonyPatch(typeof(Terminal), "Awake")]
 		private static void TerminalAwakePatch()
 		{
-			ApplyValues();
-		}
-
-		internal void SendSync()
-		{
-			if (!IsHost) return;
-
-			foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
-			{
-				if (NetworkManager.Singleton.LocalClientId == clientId)
-				{
-					continue;
-				}
-
-				OnRequestSync(clientId, default);
-			}
+			Plugin.Config.UpdateValues();
 		}
 	}
 }
