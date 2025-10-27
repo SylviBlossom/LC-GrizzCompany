@@ -1,3 +1,7 @@
+### v1.0.5
+- Update to v73
+- Increase scrap cannon price to 600 (was 300, can be changed in the config)
+
 ### v1.0.4
 - Update to v50
 - Disable scrap cannon movement hinderance (can be re-enabled in config)

@@ -20,7 +20,7 @@ namespace GrizzCompany.Items
 
 		public static class ScrapCannon
 		{
-			public const int price = 300;
+			public const int price = 600;
 
 			public static Item item { get; internal set; }
 
